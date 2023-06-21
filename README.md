@@ -41,3 +41,100 @@ The Parzen-Rosenblatt window method, also known as the Parzen-window method, is 
 Estimating the class-conditional density (“likelihoods”) p(x|wi) in classification using the training dataset where p(x) refers to a multi-dimensional sample that belongs to a particular class wi is a prominent application of the Parzen-window technique.
 
 For detailed description of Parzen windows, refer to this [link](https://sebastianraschka.com/Articles/2014_kernel_density_est.html).
+
+### Understanding Kernel Density Estimation
+Kernel density estimation(KDE) is analogous to histograms, where we calculate the sum of a gaussian bell computed around every data point. A KDE is a sum of different parametric distributions produced by each observation point given some parameters. We are just calculating the probability of data having a specific value denoted by the x-axis of the KDE plot. Also, the overall area under the KDE plot sums up to 1. Let us understand this using an example.
+
+![image](https://github.com/ritzi12/pnn_probab_neural_net/assets/80144294/115ac17e-e1b0-41eb-814c-1578c57d7891)
+Example of different Types of Kernel
+
+Now we will see a distribution of the “sepal length” feature of Iris Dataset and its corresponding kde.
+![image](https://github.com/ritzi12/pnn_probab_neural_net/assets/80144294/d9f959e8-5699-4756-a8d2-4f51197c00af)
+Distribution of Sepal Length of Iris Dataset
+
+Now using the above-mentioned kernel functions, we will try to build kernel density estimate for sepal length for different values of smoothing parameter(bandwidth).
+
+![image](https://github.com/ritzi12/pnn_probab_neural_net/assets/80144294/e83db7be-b563-49c7-bbfb-e4ca157e29ee)
+KDE Plot for different types of the kernel and bandwidth values
+
+As we can see, triangle, gaussian, and epanechnikov give better approximations at 0.8 and 1.0 bandwidth values. As we increase, the bandwidth curve becomes more smooth and flattened, and if we decrease, the bandwidth curve becomes more zigzag and sharp-edged. Thus, bandwidth in PNN can be considered similar to the k value in KNN
+
+### KNN and Parzen Windows
+Parzen windows can be considered a k-Nearest Neighbour (KNN) technique generalization. Rather than choosing k nearest neighbors of a test point and labeling it with the weighted majority of its neighbors’ votes, one can consider all observations in the voting scheme and assign their weights using the kernel function.
+
+In the Parzen windows estimation, the interval’s length is fixed, but the number of samples that fall within an interval changes over time. For the k nearest neighbor density estimate, the opposite is true.
+
+## Architecture of PNN
+The below image describes the architecture of PNN, which consists of four significant layers, and they are:
+
+* Input Layer
+* Pattern Layer
+* Summation Layer
+* Output Layer
+  
+Let us now try to understand each layer one by one.
+
+![image](https://github.com/ritzi12/pnn_probab_neural_net/assets/80144294/689e3f78-6c5b-47fd-a009-cf3520be3a9e)
+
+### Input Layer
+In this layer, each feature variable or predictor of the input sample is represented by a neuron in the input layer. For example, if you have a sample with four predictors, the input layer should have four neurons. If the predictor is a categorical variable with N categories, then we convert it to an N-1 dummy and use N-1 neurons. We also normalize the data using suitable scalers. The input neurons then send the values to each of the neurons in the hidden layer, the next pattern layer.
+
+### Pattern Layer
+This layer has one neuron for each observation in the training data set. A hidden neuron first determines the Euclidean distance between the test observation and the pattern neuron to apply the radial basis kernel function. For the Gaussian kernel, the multivariate estimates can be expressed as,
+![image](https://github.com/ritzi12/pnn_probab_neural_net/assets/80144294/b526d1c8-a956-4af8-826b-0fd701babe9d)
+
+where,
+
+For each neuron “i” in the pattern layer, we find the Euclidean distance between the test input and the pattern.
+
+Sigma = Smoothing parameter
+
+d= each feature vector size
+
+x = test input vector
+
+xi = pattern ith neuron vector
+
+### Summation Layer
+This layer consists of 1 neuron for each class or category of the target variable. Suppose we have three classes. Then we will have three neurons in this layer. Each Type of pattern layer neuron is joined to its corresponding Type neuron in the summation layer. Neurons in this layer sum and average the values of pattern layer neurons attached to it. vi is the output of each neuron here.
+
+![image](https://github.com/ritzi12/pnn_probab_neural_net/assets/80144294/27d17e63-8946-4f81-9b78-e4c003ede23d) 
+*Source: Paper by Specht 1990*
+
+### Output Layer
+The output layer predicts the target category by comparing the weighted votes accumulated in the pattern layer for each target category.
+
+## Algorithm of PNN
+The following are the high-level steps of the PNN algorithm:
+
+1.  Standardize the input features and feed them to the input layer.
+
+2. In the pattern Layer, each training observation forms one neuron and kernel with a specific smoothing parameter/bandwidth value used as an activation function. For each input observation, we find the kernel function value K(x,y) from each pattern neuron, i.e., training observation.
+
+3. Then sum up the K(x,y) values for patterns in the same class in the summation layer. Also, take an average of these values. Thus, the number of outputs for this layer equals the number of classes in the “target” variable.
+
+4. The final layer output layer compares the output of the preceding layer, i.e., the summation layer. It checks the maximum output for which class label is based on average K(x,y) values for each class in the preceding layer. The predicted class label is assigned to input observation with the highest value of average K(x,y).
+
+## Conclusion
+Thus, we saw using PNN; we get high accuracy and f1 score with based on optimal kernel and bandwidth selection.  Also, the best-performing kernels were Gaussian, Triangular, and Epanechnikov kernels. The following are the key takeaways:
+
+1. PNN enables us to build fast and less complex networks involving few layers.
+
+2. We saw various combinations of kernel functions can be employed, and the optimal kernels can be chosen based on performance metrics.
+
+3. PNN  is less time-consuming as it does not involve complex computations.
+
+4. PNN can capture complex decision boundaries due to nonlinearity introduced by kernels which are present as activation functions.
+
+Thus, PNN has wide scope and implementations in various domains.
+
+### References
+
+Papers - 
+* [Specht 1990](https://www.sciencedirect.com/science/article/abs/pii/089360809090049Q)
+* Pnn Classification()
+
+
+
+
+
