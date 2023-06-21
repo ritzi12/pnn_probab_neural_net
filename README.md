@@ -132,7 +132,7 @@ Thus, PNN has wide scope and implementations in various domains.
 
 Papers - 
 * [Specht 1990](https://www.sciencedirect.com/science/article/abs/pii/089360809090049Q)
-* Pnn Classification()
+* [Pnn Classification](https://github.com/ritzi12/pnn_probab_neural_net/blob/main/pnn.pdf)
 
 #### If you found this repo useful please mark it as STAR ! :)
 
